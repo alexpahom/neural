@@ -69,9 +69,11 @@ class NeuralNet
       csv << %w(ImageID Label)
 
       data_table.observations.each_with_index do |observation, i|
-        print '.'
+        print '.' if (i + 1) % 100 == 0
+        puts if (i + 1) % 10000 == 0
         csv << [(i + 1).to_s, forward(observation, eval_or_train: 'eval')]
       end
+      puts
     end
   end 
 
@@ -154,12 +156,12 @@ def backprop(a1, a2_with_bias, z2, z3, a3, label)
   # by a factor of 10 less than than the second layer. for numerical
   # stability. Big weight changes -> big weights -> equals big sums -> saturated neurons
     
-  @w1 = @w1 - grad1.transpose * alpha * 0.1
-  @w2 = @w2 - grad2.transpose * alpha
+  @w1 -= grad1.transpose * alpha * 0.1
+  @w2 -= grad2.transpose * alpha
 end
 
 def train
-  puts "Entered Training"
+  puts 'Entered Training'
   i = 0
   start_time = Time.now
   initialize_new_weights
@@ -170,16 +172,16 @@ def train
     # it's results to the backprop method. The backprop method will update the weights
     forward(@dt.sample, eval_or_train: 'train')
 
-    ave_error_history = running_average(1000, @error_history)
-    ave_error_history_5000 = running_average(5000, @error_history)
-    ave_classification_history = running_average(1000, @classification_history)
-    ave_classification_history_5000 = running_average(5000, @classification_history)
-    ratio = ave_classification_history / ave_classification_history_5000
+    ave_error_history_1k = running_average(1000, @error_history)
+    ave_error_history_5k = running_average(5000, @error_history)
+    ave_classification_history_1k = running_average(1000, @classification_history)
+    ave_classification_history_5k = running_average(5000, @classification_history)
+    ratio = ave_classification_history_1k / ave_classification_history_5k
 
-    puts "Running Average Error (1000) => #{ave_error_history}"
-    puts "Running Average Error (5000) => #{ave_error_history_5000}"
-    puts "Running Average Classification (1000) => #{ave_classification_history}"
-    puts "Running Average Classification (5000) => #{ave_classification_history_5000}"
+    puts "Running Average Error (1000)          => #{ave_error_history_1k}"
+    puts "Running Average Error (5000)          => #{ave_error_history_5k}"
+    puts "Running Average Classification (1000) => #{ave_classification_history_1k}"
+    puts "Running Average Classification (5000) => #{ave_classification_history_5k}"
     puts "Classification Runninge Average Ratio => #{ratio}"
   
     puts "Iteration = #{i}"

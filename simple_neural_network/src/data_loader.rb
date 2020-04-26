@@ -32,11 +32,12 @@ class Observation
 	attr_reader :label, :features
 	
 	def initialize(ary, label_index)
-		if label_index == :none
-			@label = :none
-		else	
-			@label = ary.delete_at(label_index).to_i
-		end
+		@label =
+				if label_index == :none
+					:none
+				else
+					ary.delete_at(label_index).to_i
+				end
 		@features = ary.collect(&:to_i)
 	end
 end

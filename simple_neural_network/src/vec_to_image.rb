@@ -45,8 +45,10 @@ class VectoImage
 					#colored version -- image[(i)*(28) + (k % 28),(j)*(28) + (k / 28)] = ChunkyPNG::Color.rgb((small_image[k] * s2).ceil,(small_image[k] * s3).ceil,(small_image[k] * s1).ceil)
 					image[i * SIZE + k % SIZE, j * SIZE + k / SIZE] = ChunkyPNG::Color.grayscale(small_image[k])
 				end
+				print '.'
 			end
 		end
+		puts
 		image
 	end
 end
