@@ -9,16 +9,16 @@
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="RVM: ruby-2.3.8" jdkType="RUBY_SDK" />
+    <orderEntry type="jdk" jdkName="RVM: ruby-2.4.6" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="backports (v3.17.1, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.16.6, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="chunky_png (v1.3.11, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coderay (v1.1.2, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="fastest-csv (v0.0.4, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="method_source (v1.0.0, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="nmatrix (v0.2.4, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="packable (v1.3.10, RVM: ruby-2.3.8) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="pry (v0.13.1, RVM: ruby-2.3.8) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="backports (v3.17.1, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.17.3, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="chunky_png (v1.3.11, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="coderay (v1.1.2, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="fastest-csv (v0.0.4, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="method_source (v1.0.0, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="nmatrix (v0.2.4, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="packable (v1.3.10, RVM: ruby-2.4.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="pry (v0.13.1, RVM: ruby-2.4.6) [gem]" level="application" />
   </component>
 </module>

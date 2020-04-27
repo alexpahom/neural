@@ -55,4 +55,3 @@ end
 
 # VectoImage.new(1,1, handmade: true)
 VectoImage.new 5, 5
-

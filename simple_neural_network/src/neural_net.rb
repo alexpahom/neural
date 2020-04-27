@@ -69,7 +69,7 @@ class NeuralNet
   def create_test_submission
    puts 'Creating submission'
    load_trained_weights
-   @hidden_nodes = @w1.shape[1] 
+   @hidden_nodes = @w1.shape.last
 
     data_table = DataTable.new(file: '../data/manual_test_set.csv', label_index: :none)
     # data_table = DataTable.new(file: '../data/mnist_digits/test.csv', label_index: :none)
@@ -80,7 +80,7 @@ class NeuralNet
       data_table.observations.each_with_index do |observation, i|
         print '.' if (i + 1) % 100 == 0
         puts if (i + 1) % 10000 == 0
-        csv << [(i + 1).to_s, forward(observation)]
+        csv << [i + 1, forward(observation)]
       end
       puts
     end
@@ -103,9 +103,10 @@ class NeuralNet
     a2 = activation_function(z2, hidden_func)
 
     # resize the hidden layer to add the bias unit
-    a2_with_bias = NMatrix.zeroes([1, hidden_nodes + 1])
-    a2_with_bias[0, 0..hidden_nodes] = a2
-    a2_with_bias[0, hidden_nodes] = 1.0
+    a2_with_bias = NMatrix.zeroes([1, hidden_nodes + 1]).tap do |matrix|
+      matrix[0, 0..hidden_nodes] = a2
+      matrix[0, hidden_nodes] = 1.0
+    end
 
     #z3 = a2 x @w2, propogating the hidden layer forward to get the sums in the output layer
     z3 = a2_with_bias.dot(@w2)
@@ -177,17 +178,17 @@ def train
     # it's results to the backprop method. The backprop method will update the weights
     forward(@dt.sample)
 
-    ave_error_history_1k = running_average(1000, @error_history)
-    ave_error_history_5k = running_average(5000, @error_history)
-    ave_classification_history_1k = running_average(1000, @classification_history)
-    ave_classification_history_5k = running_average(5000, @classification_history)
-    ratio = ave_classification_history_1k / ave_classification_history_5k
+    avg_error_history_1k = running_average(1000, @error_history)
+    avg_error_history_5k = running_average(5000, @error_history)
+    avg_classification_history_1k = running_average(1000, @classification_history)
+    avg_classification_history_5k = running_average(5000, @classification_history)
+    ratio = avg_classification_history_1k / avg_classification_history_5k
 
-    puts "Running Average Error (1000)          => #{ave_error_history_1k}"
-    puts "Running Average Error (5000)          => #{ave_error_history_5k}"
-    puts "Running Average Classification (1000) => #{ave_classification_history_1k}"
-    puts "Running Average Classification (5000) => #{ave_classification_history_5k}"
-    puts "Classification Runninge Average Ratio => #{ratio}"
+    puts "Average Error (1000)          => #{avg_error_history_1k}"
+    puts "Average Error (5000)          => #{avg_error_history_5k}"
+    puts "Average Classification (1000) => #{avg_classification_history_1k}"
+    puts "Average Classification (5000) => #{avg_classification_history_5k}"
+    puts "Classification Average Ratio  => #{ratio}"
   
     puts "Iteration = #{i}"
     puts "---"
@@ -206,55 +207,39 @@ def train
 end 
 
   def running_average(scale, ary)
-    ary.last(scale).inject { |sum, el| sum + el }.to_f / [scale, ary.size].min
+    ary.last(scale).sum.to_f / [scale, ary.size].min
   end 
 
   def sigmoid(mat)
-    NMatrix.ones(mat.shape)/(NMatrix.ones(mat.shape) + (-mat).exp)
-  end 
-
-  def rect_lin(mat)
-    (mat / 10.0).map do |el|
-      el < 0 ? 0 : el
-    end 
-  end   
+    ones = Matrix.ones(mat.shape)
+    ones / (ones + (-mat).exp)
+  end
 
   def tanh(mat)
     ( (mat).exp - (-mat).exp )/( (mat).exp + (-mat).exp )
   end
 
-  def sine(mat)
-    mat.sin
-  end
-
   def softmax(mat)
     mat.map! { |el| Math::exp(el) }
-    sum = mat.inject(0) { |sum, el| sum + el }
-    mat.map { |el| el / sum.to_f }
+    sum = mat.to_a.sum
+    mat.map { |el| el / sum }
   end 
 
   def activation_function(mat, func)
     case func
-    when 'sin'; mat.sin
     when 'sigmoid'; sigmoid(mat)
     when 'tanh'; tanh(mat)
-    when 'rect_lin'; rect_lin(mat)
     when 'softmax'; softmax(mat)
     end
   end
 
   def derivative(mat, func)
+    ones = NMatrix.ones(mat.shape)
     case func
-    when 'sin'
-      mat.cos
     when 'sigmoid'
-      sigmoid(mat) * (NMatrix.ones(mat.shape) - sigmoid(mat))
+      sigmoid(mat) * (ones - sigmoid(mat))
     when 'tanh'
-      (NMatrix.ones(mat.shape) - tanh(mat)) * (NMatrix.ones(mat.shape) + tanh(mat))
-    when 'rect_lin'
-      (mat / 10.0 ).map do |el|
-        el < 0 ? 0 : 0.1
-      end
+      (ones - tanh(mat)) * (ones + tanh(mat))
     end
   end
 

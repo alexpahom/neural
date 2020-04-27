@@ -33,11 +33,11 @@ class Observation
 	
 	def initialize(ary, label_index)
 		@label =
-				if label_index == :none
-					:none
-				else
-					ary.delete_at(label_index).to_i
-				end
+			if label_index == :none
+				:none
+			else
+				ary.delete_at(label_index).to_i
+			end
 		@features = ary.collect(&:to_i)
 	end
 end
