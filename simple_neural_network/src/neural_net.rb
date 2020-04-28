@@ -76,7 +76,6 @@ class NeuralNet
 
     CSV.open('../data/submission.csv', 'wb') do |csv|
       csv << %w(ImageID Digit)
-
       data_table.observations.each_with_index do |observation, i|
         print '.' if (i + 1) % 100 == 0
         puts if (i + 1) % 10000 == 0
@@ -223,7 +222,7 @@ end
     mat.map! { |el| Math::exp(el) }
     sum = mat.to_a.sum
     mat.map { |el| el / sum }
-  end 
+  end
 
   def activation_function(mat, func)
     case func

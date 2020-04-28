@@ -5,6 +5,8 @@ require 'csv'
 
 class VectoImage
 	attr_reader :dt, :small_images
+	include ChunkyPNG::Color
+
 	SIZE = 28
 	def initialize(images_wide, images_high, params = {})
 		@small_images = []
@@ -29,10 +31,15 @@ class VectoImage
 	private
 
 	def upload_handmade
-		pixels = ChunkyPNG::Image.from_file('handmade.png').pixels
-			.map! { |el| el = 0 if el != 255 }
-		CSV.open('handmade.csv', 'wb') { |csv| csv << pixels }
-		DataTable.new(file: 'handmade.csv', label_index: :none)
+		pixels = ChunkyPNG::Image.from_file('../data/images/handmade.png')
+								 .resize(28, 28)
+								 .pixels
+								 .map!(&method(:to_gradescale))
+		@small_images << pixels
+	end
+
+	def to_gradescale(color)
+		(0.3 * r(color) + 0.59 * g(color) + 0.11 * b(color)).to_i
 	end
 
 	def build_image(wide, high)
@@ -43,7 +50,7 @@ class VectoImage
 				@small_images << small_image
 				small_image.size.times do |k|
 					#colored version -- image[(i)*(28) + (k % 28),(j)*(28) + (k / 28)] = ChunkyPNG::Color.rgb((small_image[k] * s2).ceil,(small_image[k] * s3).ceil,(small_image[k] * s1).ceil)
-					image[i * SIZE + k % SIZE, j * SIZE + k / SIZE] = ChunkyPNG::Color.grayscale(small_image[k])
+					image[i * SIZE + k % SIZE, j * SIZE + k / SIZE] = grayscale(small_image[k])
 				end
 				print '.'
 			end
