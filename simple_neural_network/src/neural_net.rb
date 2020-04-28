@@ -148,11 +148,9 @@ def backprop(a1, a2_with_bias, z2, z3, a3, label)
   # excludes the bias node. No error is passed to the bias node.  
   d2 = @w2.dot(d3.transpose)[0..(@hidden_nodes-1)] * derivative(z2.transpose, @hidden_func)
   
-  # matrix with dimensions equal to @w1's dimensions
-  # each element contains the gradient of the weight
-  # with respect to the cost function. If the weights
-  # are reduced by a small fraction of this value the cost function
-  # will go down
+  # matrix with dimensions equal to @w1's dimensions each element contains the
+  # gradient of the weight with respect to the cost function. If the weights
+  # are reduced by a small fraction of this value the cost function will go down
   grad1 = d2.dot(a1)
   
   # same for @w2
@@ -173,8 +171,7 @@ def train
     
   loop do 
     # forward pass in the network with a random observation from @dt.sample.
-    # eval_or_train is passed as train becuase the forward method has to pass
-    # it's results to the backprop method. The backprop method will update the weights
+    # its results go to the backprop method. The backprop method will update the weights
     forward(@dt.sample)
 
     avg_error_history_1k = running_average(1000, @error_history)
@@ -192,8 +189,8 @@ def train
     puts "Iteration = #{i}"
     puts "---"
 
-    if ratio < 1.0 and i > 2000
-    # if ratio < 1.0 and i > 60000
+    #if ratio < 1.0 and i > 2000
+    if ratio < 1.0 and i > 60000
       finish_time = Time.now
       File.open('../data/w1.txt', 'w') { |f| f << Marshal.dump(@w1.to_a) }
       File.open('../data/w2.txt', 'w') { |f| f << Marshal.dump(@w2.to_a) }
@@ -205,8 +202,9 @@ def train
   end
 end 
 
-  def running_average(scale, ary)
-    ary.last(scale).sum.to_f / [scale, ary.size].min
+  # arithmetic average
+  def running_average(scale, array)
+    array.last(scale).sum.to_f / [scale, array.size].min
   end 
 
   def sigmoid(mat)

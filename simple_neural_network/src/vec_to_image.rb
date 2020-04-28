@@ -20,6 +20,7 @@ class VectoImage
 		end
 	end
 
+	# uploads handmade picture or loads some from train data
 	def read_data(params = {})
 		if params[:handmade]
 			upload_handmade
@@ -30,6 +31,7 @@ class VectoImage
 
 	private
 
+	# open image -> resize to 28x28 -> grab pixels -> convert to grayscale -> record
 	def upload_handmade
 		pixels = ChunkyPNG::Image.from_file('../data/images/handmade.png')
 								 .resize(28, 28)
@@ -38,10 +40,12 @@ class VectoImage
 		@small_images << pixels
 	end
 
+	# convert to grayscale using approximate ratios
 	def to_gradescale(color)
 		(0.3 * r(color) + 0.59 * g(color) + 0.11 * b(color)).to_i
 	end
 
+	# builds single image that consists of WIDExHIGH random small images
 	def build_image(wide, high)
 		image = ChunkyPNG::Image.new(wide * SIZE, high * SIZE)
 		wide.times do |i|
